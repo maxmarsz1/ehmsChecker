@@ -1,5 +1,6 @@
-API = 'API_KEY'
+API = '6046906090:AAFS8YgUMK49o4w5ooGe8-xGg77Fnu7hU8k'
 JOB_FILENAME = 'jobs'
+INTERVAL = 1800
 
 from check import checkIfNewAnn
 
@@ -19,7 +20,7 @@ def initJobs(job_queue):
         chat_ids = pickle.load(open(JOB_FILENAME, 'rb'))
         print(chat_ids)
         for chat_id in chat_ids:
-            job_queue.run_repeating(check, 1800, chat_id=chat_id, name=str(chat_id))
+            job_queue.run_repeating(check, INTERVAL, chat_id=chat_id, name=str(chat_id))
     except FileNotFoundError as e:
         print("No jobs saved")
 
@@ -38,7 +39,7 @@ async def check(context: ContextTypes.DEFAULT_TYPE) -> None:
     new_ann = checkIfNewAnn()
 
     if new_ann:
-        text = f"Nowe ogłoszenie: {new_ann}"
+        text = f"Nowe ogłoszenie:\n{new_ann}"
         await context.bot.send_message(chat_id=job.chat_id, text=text)
 
 
@@ -57,14 +58,13 @@ async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_message.chat_id
 
     job_removed = remove_job_if_exists(str(chat_id), context)
-    context.job_queue.run_repeating(check, 1800, chat_id=chat_id, name=str(chat_id))
+    context.job_queue.run_repeating(check, INTERVAL, chat_id=chat_id, name=str(chat_id))
 
     if job_removed:
         text = "Already subscribed"
     else: 
         text = "Subscribed"
         saveJobs(context.job_queue)
-
 
     await update.effective_message.reply_text(text)
 

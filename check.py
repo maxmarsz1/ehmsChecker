@@ -58,7 +58,7 @@ def checkIfNewAnn():
     lprint("Sprawdzam ogłoszenia...")
     if prev_ann != ann:
         lprint("Nowe ogłoszenie!")
-        new_ann = ann.replace(prev_ann, '')
+        new_ann = ann.replace(prev_ann, '') if prev_ann is not None else ann
     else:
         lprint('Nic nowego')
         new_ann= False
