@@ -32,8 +32,12 @@ def getAnnTitles():
         s.post(url, data=data)
         resp = s.get(url + '?select_kodf=&kodf=&tokid=431905')
         soup = BeautifulSoup(resp.text, 'html.parser')
-        ann = soup.tbody.find_all('tr')
-        ann_titles = "\n".join([ann.find_all('td')[1].text for ann in ann])
+        try:
+            ann = soup.tbody.find_all('tr')
+            ann_titles = "\n".join([ann.find_all('td')[1].text for ann in ann])
+        except Exception as e:
+            print(e)
+            ann_titles = ""
 
         return ann_titles
 
