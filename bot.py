@@ -1,9 +1,11 @@
-API = '6046906090:AAFS8YgUMK49o4w5ooGe8-xGg77Fnu7hU8k'
+with open('API_KEY', 'r') as f: 
+    API = f.read().strip()
 JOB_FILENAME = 'jobs'
 INTERVAL = 1800
 
-from check import checkIfNewAnn
+from check import checkIfNewAnn, lprint
 
+import datetime
 import logging
 import pickle
 from telegram import Update
@@ -37,7 +39,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def check(context: ContextTypes.DEFAULT_TYPE) -> None:
     job = context.job
     new_ann = checkIfNewAnn()
-
     if new_ann:
         text = f"Nowe ogłoszenie:\n{new_ann}"
         await context.bot.send_message(chat_id=job.chat_id, text=text)
