@@ -1,4 +1,4 @@
-API = '6046906090:AAFS8YgUMK49o4w5ooGe8-xGg77Fnu7hU8k'
+API = 'API_KEY'
 JOB_FILENAME = 'jobs'
 
 from check import checkIfNewAnn
