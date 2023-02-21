@@ -1,4 +1,6 @@
 announcements.txt
 creds.txt
 API_KEY
-jobs
+jobs.txt
+.vscode
+.gitignore
