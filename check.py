@@ -23,7 +23,7 @@ class Checker:
         )
         if not self.checkAuthorized():
             self.authorize()
-        self.checkNewAnn()
+        # self.checkNewAnn()
         self.saveSession()
 
     def saveSession(self) -> None:

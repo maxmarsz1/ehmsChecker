@@ -67,6 +67,13 @@ async def unsubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     await update.message.reply_text(text)
 
 
+async def jobsInfo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    chat_id = update.message.chat_id
+    job = context.job_queue.jobs()[0]
+
+    await update.message.reply_text(f"Job info:\nname={job.name},\nnext_run={job.next_t},\nchat_ids={json.dumps(context.bot_data['jobs'])}")
+
+
 def getRandomInterval():
     if random.randint(0, 49):
         return INTERVAL + random.randint(-900, 900)
@@ -74,6 +81,7 @@ def getRandomInterval():
 
 
 async def check(context) -> None:
+    context.bot_data['checker'].getNewSoup()
     newAnn = context.bot_data['checker'].checkIfNewAnn()
     context.job_queue.run_once(check, getRandomInterval())
     if newAnn:
@@ -87,11 +95,11 @@ if __name__ == "__main__":
     application.job_queue.run_once(check, getRandomInterval())
 
     application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("jobs", jobsInfo))
     application.add_handler(CommandHandler("subscribe", subscribe))
     application.add_handler(CommandHandler("unsubscribe", unsubscribe))
 
     application.bot_data['checker'] = Checker()
-    if application.bot_data['checker'].is_authorized:
-        application.run_polling()
+    application.run_polling()
 
     
